@@ -19,6 +19,8 @@ export default function ExchangeRate() {
         dedupingInterval: 60_000,
     });
 
+
+
     useEffect(() => {
         if (data) {
             setLastUpdated(new Date());
