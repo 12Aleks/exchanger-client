@@ -3,7 +3,7 @@ import {memo} from 'react';
 import {RatesNBP} from "@/app/lib/types";
 import {currencyToCountryCode} from "@/app/lib/currencyCountryMap";
 
-const CurrencyItem = (rate: RatesNBP) => {
+const ExchangeRateItem = (rate: RatesNBP) => {
     const avg = ((rate.bid + rate.ask) / 2).toFixed(4);
     const countryCode = currencyToCountryCode[rate.code] || 'placeholder';
     const flagSrc = `/flags/${countryCode}.svg`;
@@ -31,4 +31,4 @@ const CurrencyItem = (rate: RatesNBP) => {
     );
 };
 
-export default memo(CurrencyItem);
+export default memo(ExchangeRateItem);

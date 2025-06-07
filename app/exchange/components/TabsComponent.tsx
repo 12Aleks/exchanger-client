@@ -1,12 +1,15 @@
 import {useState} from 'react';
-import MajorCurrencies from "@/app/exchange/components/major/MajorCurrencies";
+import  ExchangeRateList from "@/app/exchange/components/major/index";
+import  HistoryRates from "@/app/exchange/components/historicalRate/index";
 import {BadgeDollarSign, ChartNoAxesCombined} from "lucide-react";
+
+import GoldPrices from "@/app/exchange/components/goldRate";
 
 const tabsList = [
     { id: 'rates', label: 'Exchange Rates', icon: <BadgeDollarSign/> },
     { id: 'history', label: 'Historical Rate', icon: <ChartNoAxesCombined/> },
-    { id: 'settings', label: 'Settings', icon: <BadgeDollarSign/> },
-    { id: 'contacts', label: 'Contacts', icon: <BadgeDollarSign/> },
+    { id: 'settings', label: 'Gold Prices & Market History', icon: <BadgeDollarSign/> },
+
 ];
 
 const TabsComponent = () => {
@@ -15,13 +18,13 @@ const TabsComponent = () => {
     const renderTabContent = () => {
         switch (activeTab) {
             case 'rates':
-                return <MajorCurrencies />;
+                return <ExchangeRateList />;
             case 'history':
-                return <MajorCurrencies />;
+                return <HistoryRates />;
             case 'settings':
-                return <MajorCurrencies />;
+                return <GoldPrices />;
             case 'contacts':
-                return <MajorCurrencies />;
+                return <ExchangeRateList />;
             default:
                 return null;
         }
@@ -51,7 +54,7 @@ const TabsComponent = () => {
                 </ul>
             </div>
             <div className="overflow-auto box-border">
-              <div className="p-4">{renderTabContent()}</div>
+              <div >{renderTabContent()}</div>
             </div>
         </div>
     );

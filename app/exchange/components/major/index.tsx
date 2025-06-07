@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-import CurrencyItem from "@/app/exchange/components/major/CurrencyItem";
+import ExchangeRateItem from "@/app/exchange/components/major/ExchangeRateItem";
 import {RatesNBP} from "@/app/lib/types";
 import { fetchExchangeRates } from "@/app/lib/api/fetchExchangeRates";
 
 
-const MajorCurrencies = () => {
+const ExchangeRateList = () => {
     const {data, isLoading, error} = useQuery({
       queryKey: ['exchangeRates'],
       queryFn: fetchExchangeRates,
@@ -17,7 +17,7 @@ const MajorCurrencies = () => {
     if (error) return <div>Error loading exchange rates.</div>;
     if (!data ) return null;
 
-    const {tradingDate, rates} = data;
+    const {timestamp, rates} = data;
 
     return (
 
@@ -33,7 +33,7 @@ const MajorCurrencies = () => {
                     </thead>
                     <tbody>
                     {rates.map((rate: RatesNBP) => (
-                        <CurrencyItem key={rate.code} {...rate}/>
+                        <ExchangeRateItem key={rate.code} {...rate}/>
                     ))}
                     </tbody>
                 </table>
@@ -41,4 +41,4 @@ const MajorCurrencies = () => {
     );
 };
 
-export default MajorCurrencies;
+export default ExchangeRateList;

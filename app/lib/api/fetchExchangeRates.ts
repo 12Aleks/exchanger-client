@@ -1,19 +1,56 @@
-import { RatesNBP } from "@/app/lib/types";
+import {RateNBPHistory, RatesNBP, GoldRate} from "@/app/lib/types";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export const fetchExchangeRates = async (): Promise<{
-    tradingDate: string;
+interface GET_RATES {
+    timestamp: number;
     rates: RatesNBP[];
-}> => {
-    const res = await fetch('https://api.nbp.pl/api/exchangerates/tables/C/?format=json');
+}
+
+
+export const fetchExchangeRates = async (): Promise<GET_RATES> => {
+    const res = await fetch(`${API_URL}/exchange`);
     if (!res.ok) {
         const error = await res.json().catch(() => ({}));
         throw new Error(error?.message || 'Failed to fetch exchange rate');
     }
 
     const data = await res.json();
-    if (!Array.isArray(data) || !data[0]) {
+    if (!data || !Array.isArray(data.rates)) {
         throw new Error('Invalid data format');
     }
 
-    return data[0];
+    return data;
 };
+
+export const fetchHistoryRates = async (): Promise<RateNBPHistory[]> => {
+    const res = await fetch(`${API_URL}/exchange/history`);
+
+    if (!res.ok) {
+        const error = await res.json().catch(() => ({}));
+        throw new Error(error?.message || 'Failed to fetch exchange rate');
+    }
+
+    const data = await res.json();
+    if (!data || !Array.isArray(data) || data.length === 0) {
+        throw new Error('Invalid data format');
+    }
+
+    return data;
+}
+
+
+export const fetchGoldRates = async (): Promise<GoldRate[]> => {
+    const res = await fetch(`${API_URL}/exchange/gold`);
+
+    if (!res.ok) {
+        const error = await res.json().catch(() => ({}));
+        throw new Error(error?.message || 'Failed to fetch exchange rate');
+    }
+
+    const data = await res.json();
+    if (!data || !Array.isArray(data) || data.length === 0) {
+        throw new Error('Invalid data format');
+    }
+
+    return data;
+}

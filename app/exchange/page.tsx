@@ -2,9 +2,7 @@
 import { useState } from "react";
 import { Transaction } from "../lib/types";
 import ExchangeForm from "./components/ExchangeForm";
-import TransactionHistory from "./components/TransactionHistory";
 import {ExchangeRateWithButton} from "@/app/exchange/components/ExchangeRateWithButton";
-import MajorCurrencies from "@/app/exchange/components/major/MajorCurrencies";
 import TabsComponent from "@/app/exchange/components/TabsComponent";
 
 
@@ -45,8 +43,6 @@ export default function ExchangePage() {
             <ExchangeForm onSubmitAction={handleAction} amountPLN={result}>
                 <ExchangeRateWithButton />
             </ExchangeForm>
-            {/*<TransactionHistory transactions={transactions} />*/}
-           {/*<MajorCurrencies/>*/}
             <TabsComponent />
         </div>
     );
