@@ -4,6 +4,7 @@ import { Transaction } from "../lib/types";
 import ExchangeForm from "./components/ExchangeForm";
 import {ExchangeRateWithButton} from "@/app/exchange/components/ExchangeRateWithButton";
 import TabsComponent from "@/app/exchange/components/TabsComponent";
+import Info from "@/app/exchange/components/Info";
 
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -44,6 +45,7 @@ export default function ExchangePage() {
                 <ExchangeRateWithButton />
             </ExchangeForm>
             <TabsComponent />
+            <Info/>
         </div>
     );
 }

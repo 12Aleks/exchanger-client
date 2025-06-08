@@ -14,6 +14,11 @@ export interface RatesNBP {
    ask: number;
 }
 
+export interface ExtendedRate extends RatesNBP {
+    previousBid?: number;
+    previousAsk?: number;
+}
+
 export interface ExchangeRate {
     currency: string;
     code: string;

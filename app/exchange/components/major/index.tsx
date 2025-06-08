@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import ExchangeRateItem from "@/app/exchange/components/major/ExchangeRateItem";
 import {RatesNBP} from "@/app/lib/types";
 import { fetchExchangeRates } from "@/app/lib/api/fetchExchangeRates";
+import Spinner from "@/app/exchange/components/Spinner";
 
 
 const ExchangeRateList = () => {
@@ -13,15 +14,14 @@ const ExchangeRateList = () => {
     })
 
 
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) return <Spinner />;
     if (error) return <div>Error loading exchange rates.</div>;
     if (!data ) return null;
 
-    const {timestamp, rates} = data;
+    const {rates} = data;
 
-    return (
 
-                <table className="table-auto w-full">
+    return ( <table className="table-auto w-full">
                     <thead className="sticky top-0 bg-white z-10">
                     <tr className="border-b border-gray-300">
                         <th className="pb-2">Country</th>
@@ -32,7 +32,7 @@ const ExchangeRateList = () => {
                     </tr>
                     </thead>
                     <tbody>
-                    {rates.map((rate: RatesNBP) => (
+                    {rates?.map((rate: RatesNBP) => (
                         <ExchangeRateItem key={rate.code} {...rate}/>
                     ))}
                     </tbody>

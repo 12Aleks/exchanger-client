@@ -1,26 +1,26 @@
-import {RateNBPHistory, RatesNBP, GoldRate} from "@/app/lib/types";
+import {RateNBPHistory, RatesNBP, GoldRate, ExtendedRate} from "@/app/lib/types";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-interface GET_RATES {
-    timestamp: number;
-    rates: RatesNBP[];
-}
-
-
-export const fetchExchangeRates = async (): Promise<GET_RATES> => {
+export async function fetchExchangeRates(): Promise<{ rates: ExtendedRate[]; tradingDate: string }> {
     const res = await fetch(`${API_URL}/exchange`);
-    if (!res.ok) {
-        const error = await res.json().catch(() => ({}));
-        throw new Error(error?.message || 'Failed to fetch exchange rate');
-    }
-
     const data = await res.json();
-    if (!data || !Array.isArray(data.rates)) {
-        throw new Error('Invalid data format');
-    }
 
-    return data;
-};
+    const { rates, previousRates } = data;
+
+    const enrichedRates = rates.map((rate: RatesNBP) => {
+        const yesterday = previousRates.find((r: RatesNBP) => r.code === rate.code);
+        return {
+            ...rate,
+            previousBid: yesterday?.bid,
+            previousAsk: yesterday?.ask,
+        };
+    });
+
+    return {
+        tradingDate: data.tradingDate,
+        rates: enrichedRates,
+    };
+}
 
 export const fetchHistoryRates = async (): Promise<RateNBPHistory[]> => {
     const res = await fetch(`${API_URL}/exchange/history`);

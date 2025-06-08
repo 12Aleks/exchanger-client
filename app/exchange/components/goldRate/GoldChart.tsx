@@ -11,6 +11,7 @@ import {
 import { Line } from "react-chartjs-2";
 import { GoldRate } from "@/app/lib/types";
 import { memo } from "react";
+import {formatFullDate, formatShortDate} from "@/app/lib/formatData";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend);
 
@@ -19,7 +20,15 @@ interface Props {
 }
 
 const GoldChart = ({ data }: Props) => {
-    const dates = data.map((entry) => entry.data);
+    const rawDates = data.map((entry) => entry.data);
+
+    const dates = rawDates.map((dateStr, index) => {
+        if (index === 0 || index === rawDates.length - 1) {
+            return formatFullDate(dateStr);
+        }
+        return formatShortDate(dateStr); 
+    });
+
     const values = data.map((entry) => entry.cena);
 
     const chartData = {
@@ -43,6 +52,7 @@ const GoldChart = ({ data }: Props) => {
             legend: {
                 position: "top" as const,
                 fontColor: "white",
+                display: false,
             },
             tooltip: {
                 mode: "index" as const,
@@ -67,7 +77,7 @@ const GoldChart = ({ data }: Props) => {
     };
 
     return (
-        <div  className="relative min-h-[390px]">
+        <div  className="relative min-h-[320px] h">
             <Line data={chartData} options={options} />
         </div>
     );

@@ -1,22 +1,16 @@
 "use client";
-import {
-    Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Tooltip,
-    Legend,
-} from "chart.js";
+
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend} from "chart.js";
 import { Line } from "react-chartjs-2";
-import { ExchangeRate} from "@/app/lib/types";
-import {memo} from "react";
+import { ExchangeRate } from "@/app/lib/types";
+import { memo } from "react";
+import {formatShortDate, formatFullDate} from "@/app/lib/formatData";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend);
 
 interface TableEntry {
     effectiveDate: string;
-    rates: ExchangeRate[]
+    rates: ExchangeRate[];
 }
 
 interface Props {
@@ -25,14 +19,21 @@ interface Props {
 }
 
 const CurrencyChart = ({ data, currencyCode }: Props) => {
-    const dates = data.map((entry) => entry.effectiveDate);
+    const rawDates = data.map((entry) => entry.effectiveDate);
+
+    const dates = rawDates.map((dateStr, index) => {
+        if (index === 0 || index === rawDates.length - 1) {
+            return formatFullDate(dateStr); // Full format
+        }
+        return formatShortDate(dateStr); // Short format
+    });
 
     const values = data
         .map((entry) => entry.rates.find((r) => r.code === currencyCode)?.mid ?? null)
         .filter((v): v is number => v !== null);
 
     const chartData = {
-        labels: dates.slice(0, values.length), // Ensures alignment
+        labels: dates.slice(0, values.length),
         datasets: [
             {
                 label: `Kurs ${currencyCode}`,
@@ -51,7 +52,6 @@ const CurrencyChart = ({ data, currencyCode }: Props) => {
         plugins: {
             legend: {
                 position: "top" as const,
-                fontColor: "white",
             },
             tooltip: {
                 mode: "index" as const,
@@ -64,18 +64,17 @@ const CurrencyChart = ({ data, currencyCode }: Props) => {
             intersect: false,
         },
         scales: {
-
             y: {
                 title: {
                     display: true,
-                    text: "Kurs [PLN]",
+                    text: "Kurs PLN",
                 },
             },
-
         },
     };
 
-    return (<div className="relative min-h-[390px]">
+    return (
+        <div className="relative min-h-[390px]">
             <Line data={chartData} options={options} />
         </div>
     );
