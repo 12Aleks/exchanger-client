@@ -24,7 +24,7 @@ export default function ExchangeForm({onSubmitAction, children, amountPLN = 0}: 
 
 
     return (
-        <div className="flex flex-col gap-6 rounded-3xl bg-white p-6 shadow-3xl md:p-8 z-20">
+        <div className="flex flex-col gap-6 rounded-3xl bg-white p-3 2xl:p-6 shadow-3xl md:p-8 z-20">
             <form onSubmit={handleSubmit(onSubmitAction)} className="space-y-6 ">
 
                 <div className="flex flex-col md:flex-row items-center gap-1 lg:gap-4">

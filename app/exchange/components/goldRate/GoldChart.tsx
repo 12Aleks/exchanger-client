@@ -37,7 +37,7 @@ const GoldChart = ({ data }: Props) => {
             {
                 label: `Kurs złota`,
                 data: values,
-                borderColor: "rgb(37, 99, 235)",
+                borderColor: "rgb(21,85,236)",
                 backgroundColor: "rgba(37, 99, 235, 0.3)",
                 tension: 0.3,
                 fill: true,
@@ -77,7 +77,7 @@ const GoldChart = ({ data }: Props) => {
     };
 
     return (
-        <div  className="relative min-h-[320px] h">
+        <div  className="relative min-h-[330px] h">
             <Line data={chartData} options={options} />
         </div>
     );

@@ -30,10 +30,8 @@ const TabsComponent = () => {
         }
     };
 
-
     return (
-        <div className="flex flex-col gap-3 rounded-3xl bg-white shadow-3xl md:p-8 z-20 max-h-[550px]">
-
+        <div className="flex flex-col gap-4 rounded-3xl bg-white shadow-3xl md:p-8 z-20 max-h-[550px]">
             <div className="border-b border-gray-200 dark:border-gray-700">
                 <ul className="flex flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-400">
                     {tabsList?.map((tab) => (
@@ -53,7 +51,7 @@ const TabsComponent = () => {
                     ))}
                 </ul>
             </div>
-            <div className="overflow-auto box-border min-h-[410px] flex items-center justify-center flow">
+            <div className="overflow-auto box-border min-h-[410px]">
               {renderTabContent()}
             </div>
         </div>

@@ -4,7 +4,7 @@ import { Transaction } from "../lib/types";
 import ExchangeForm from "./components/ExchangeForm";
 import {ExchangeRateWithButton} from "@/app/exchange/components/ExchangeRateWithButton";
 import TabsComponent from "@/app/exchange/components/TabsComponent";
-import Info from "@/app/exchange/components/Info";
+import Info from "@/app/components/Info";
 
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -40,7 +40,7 @@ export default function ExchangePage() {
     };
 
     return (
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-3 2xl:gap-5">
             <ExchangeForm onSubmitAction={handleAction} amountPLN={result}>
                 <ExchangeRateWithButton />
             </ExchangeForm>

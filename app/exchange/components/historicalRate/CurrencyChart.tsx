@@ -15,35 +15,44 @@ interface TableEntry {
 
 interface Props {
     data: TableEntry[];
-    currencyCode: string;
+    currencyCodes: string[] | string;
 }
 
-const CurrencyChart = ({ data, currencyCode }: Props) => {
-    const rawDates = data.map((entry) => entry.effectiveDate);
+const CurrencyChart = ({ data, currencyCodes }: Props) => {
+    const codes = Array.isArray(currencyCodes) ? currencyCodes : [currencyCodes];
 
-    const dates = rawDates.map((dateStr, index) => {
-        if (index === 0 || index === rawDates.length - 1) {
-            return formatFullDate(dateStr); // Full format
-        }
-        return formatShortDate(dateStr); // Short format
+    const rawDates = data.map((entry) => entry.effectiveDate);
+    const dates = rawDates.map((dateStr, index) =>
+        index === 0 || index === rawDates.length - 1
+            ? formatFullDate(dateStr)
+            : formatShortDate(dateStr)
+    );
+
+    const datasets = codes.map((code: string, index: number) => {
+        const color = [
+            "rgb(21,85,236)",
+            "rgb(34,197,94)",
+            "rgb(244,63,94)",
+            "rgb(234,179,8)",
+        ][index % 4];
+
+        const dataPoints = data
+            .map((entry) => entry.rates.find((r) => r.code === code)?.mid ?? null)
+            .filter((v): v is number => v !== null);
+
+        return {
+            label: `Kurs ${code}`,
+            data: dataPoints,
+            borderColor: color,
+            backgroundColor: color.replace("rgb", "rgba").replace(")", ", 0.3)"),
+            tension: 0.3,
+            fill: true,
+        };
     });
 
-    const values = data
-        .map((entry) => entry.rates.find((r) => r.code === currencyCode)?.mid ?? null)
-        .filter((v): v is number => v !== null);
-
     const chartData = {
-        labels: dates.slice(0, values.length),
-        datasets: [
-            {
-                label: `Kurs ${currencyCode}`,
-                data: values,
-                borderColor: "rgb(37, 99, 235)",
-                backgroundColor: "rgba(37, 99, 235, 0.3)",
-                tension: 0.3,
-                fill: true,
-            },
-        ],
+        labels: dates,
+        datasets,
     };
 
     const options = {
@@ -74,10 +83,11 @@ const CurrencyChart = ({ data, currencyCode }: Props) => {
     };
 
     return (
-        <div className="relative min-h-[390px]">
+        <div className="relative min-h-[340px]">
             <Line data={chartData} options={options} />
         </div>
     );
 };
+
 
 export default memo(CurrencyChart);
