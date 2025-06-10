@@ -13,6 +13,9 @@ const GoldPrices = () => {
         queryFn: fetchGoldRates
     })
 
+    const selectedDate = (d: number) => {
+
+    }
 
     if (isLoading) return <Spinner/>;
     if (error) return <div>Error loading gold prices.</div>;
@@ -23,7 +26,7 @@ const GoldPrices = () => {
         <div className="w-full max-h-[400px] mx-auto bg-white">
             <div className="flex items-center justify-between gap-10 text-gray-800 px-3 pb-3 text-md">
                     <h2 className="font-bold">Current Gold Price Price: {lastPrice?.cena} zł/g</h2>
-                   <SelectForm/>
+                <SelectForm  selectedDate={selectedDate}/>
             </div>
 
             <GoldChart data={data}/>

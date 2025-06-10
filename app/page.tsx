@@ -19,7 +19,7 @@ export default function Home() {
                     </div>
                     <div
                         className="z-0 absolute bottom-0 h-[50%] w-full overflow-hidden before:absolute before:bottom-[-200px]
-                             before:left-[-300px] before:right-[-300px] before:top-0 before:rounded-[100%] before:bg-white">
+                             before:left-[-300px] before:right-[-300px] before:top-0 before:rounded-[100%] before:bg-gray-50">
                     </div>
                 </div>
             </main>

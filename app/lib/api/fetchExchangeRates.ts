@@ -22,8 +22,14 @@ export async function fetchExchangeRates(): Promise<{ rates: ExtendedRate[]; tra
     };
 }
 
-export const fetchHistoryRates = async (): Promise<RateNBPHistory[]> => {
-    const res = await fetch(`${API_URL}/exchange/history`);
+export const fetchHistoryRates = async (date: number = 30): Promise<RateNBPHistory[]> => {
+    const res = await fetch(`${API_URL}/exchange/history`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({date})
+    });
 
     if (!res.ok) {
         const error = await res.json().catch(() => ({}));
