@@ -45,8 +45,14 @@ export const fetchHistoryRates = async (date: number = 30): Promise<RateNBPHisto
 }
 
 
-export const fetchGoldRates = async (): Promise<GoldRate[]> => {
-    const res = await fetch(`${API_URL}/exchange/gold`);
+export const fetchGoldRates = async (date: number = 30): Promise<GoldRate[]> => {
+    const res = await fetch(`${API_URL}/exchange/gold`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({date})
+    });
 
     if (!res.ok) {
         const error = await res.json().catch(() => ({}));
