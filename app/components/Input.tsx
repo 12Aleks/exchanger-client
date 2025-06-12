@@ -12,7 +12,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({ error, iconSrc,
             <input
                 ref={ref}
                 {...props}
-                className={`no-spinner p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full bg-gray-100 ${iconSrc ? "pr-10" : ""}`}
+                className={`no-spinner p-2 border-none rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full bg-gray-100 ${iconSrc ? "pr-10" : ""}`}
             />
             {iconSrc && (
                 <div className="absolute inset-y-0 end-0 flex items-center pe-3">

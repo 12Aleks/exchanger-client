@@ -1,3 +1,4 @@
+"use client"
 import {useState} from 'react';
 import  ExchangeRateList from "@/app/exchange/components/major/index";
 import  HistoryRates from "@/app/exchange/components/historicalRate/index";

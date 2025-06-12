@@ -1,4 +1,5 @@
 export const currencyToCountryCode: Record<string, string> = {
+    PLN: 'pl',
     USD: 'us',
     EUR: 'eu',
     GBP: 'gb',
@@ -28,5 +29,5 @@ export const currencyToCountryCode: Record<string, string> = {
     PHP: 'ph',
     SGD: 'sg',
     THB: 'th',
-    XDR: 'pl'
+
 };

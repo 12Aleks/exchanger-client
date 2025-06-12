@@ -9,16 +9,16 @@ import SelectForm from "@/app/exchange/components/SelectForm";
 
 const GoldPrices = () => {
     const [selectedRange, setSelectedRange] = useState("30");
-    const {data, isLoading, error} = useQuery({
-        queryKey: ['goldPrice'],
-        queryFn: fetchGoldRates(Number(selectedRange)),
-    })
-
 
     const handleDateChange = (value: number) => {
         setSelectedRange(value.toString());
-
     };
+
+    const {data, isLoading, error} = useQuery({
+        queryKey: ['goldPrice', selectedRange],
+        queryFn: () => fetchGoldRates(Number(selectedRange)),
+        staleTime: 1000 * 60 * 5,
+    })
 
     if (isLoading) return <Spinner/>;
     if (error) return <div>Error loading gold prices.</div>;
