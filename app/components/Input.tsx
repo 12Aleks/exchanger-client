@@ -9,6 +9,7 @@ type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
 export const Input = forwardRef<HTMLInputElement, InputProps>(({ error, iconSrc, ...props }, ref) => {
     return (
         <div className="w-full relative">
+
             <input
                 ref={ref}
                 {...props}

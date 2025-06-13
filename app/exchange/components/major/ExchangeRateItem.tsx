@@ -21,7 +21,7 @@ const ExchangeRateItem = (rate: ExtendedRate) => {
     const flagSrc = `/flags/${countryCode}.svg`;
 
     return (
-        <tr className="border-b border-gray-100">
+        <tr className="border-b border-gray-200">
             <td className="py-2 uppercase text-center font-bold">
                 <Image
                     src={flagSrc}

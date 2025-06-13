@@ -1,10 +1,12 @@
 import {useState} from 'react';
-import {fetchGoldRates, fetchHistoryRates} from "@/app/lib/api/fetchExchangeRates";
+import {fetchGoldRates} from "@/app/lib/api/fetchExchangeRates";
 import {useQuery} from "@tanstack/react-query";
 import GoldChart from "@/app/exchange/components/goldRate/GoldChart";
-import Spinner from "@/app/exchange/components/Spinner";
-
+import dynamic from "next/dynamic";
 import SelectForm from "@/app/exchange/components/SelectForm";
+
+const Spinner = dynamic(() => import("@/app/components/Spinner"), {ssr: false});
+const Error = dynamic(() => import("@/app/components/Error"), {ssr: false});
 
 
 const GoldPrices = () => {
@@ -21,7 +23,7 @@ const GoldPrices = () => {
     })
 
     if (isLoading) return <Spinner/>;
-    if (error) return <div>Error loading gold prices.</div>;
+    if (error) return <Error/>;
     if (!data) return null;
 
     const lastPrice = data.at(data.length - 1)

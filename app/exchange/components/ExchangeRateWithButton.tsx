@@ -1,4 +1,4 @@
-import ExchangeRate from "@/app/exchange/components/ExchangeRate";
+import ExchangeHistory from "@/app/exchange/components/ExchangeHistory";
 
 export function ExchangeRateWithButton() {
     return (

@@ -2,9 +2,10 @@ import { useQuery } from '@tanstack/react-query';
 import ExchangeRateItem from "@/app/exchange/components/major/ExchangeRateItem";
 import {RatesNBP} from "@/app/lib/types";
 import { fetchExchangeRates } from "@/app/lib/api/fetchExchangeRates";
-import Spinner from "@/app/exchange/components/Spinner";
+import dynamic from "next/dynamic";
 
-
+const Spinner = dynamic(() => import("@/app/components/Spinner"), {ssr: false});
+const Error = dynamic(() => import("@/app/components/Error"), {ssr: false});
 const ExchangeRateList = () => {
     const {data, isLoading, error} = useQuery({
       queryKey: ['exchangeRates'],
@@ -15,7 +16,7 @@ const ExchangeRateList = () => {
 
 
     if (isLoading) return <Spinner />;
-    if (error) return <div>Error loading exchange rates.</div>;
+    if (error) return <Error/>;
     if (!data ) return null;
 
     const {rates} = data;

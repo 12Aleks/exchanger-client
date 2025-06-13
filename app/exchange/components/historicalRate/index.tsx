@@ -2,9 +2,11 @@ import { useState, useCallback, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { fetchHistoryRates } from '@/app/lib/api/fetchExchangeRates';
 import CurrencyChart from '@/app/exchange/components/historicalRate/CurrencyChart';
-import Spinner from '@/app/exchange/components/Spinner';
+import dynamic from "next/dynamic";
 import TabHeader from "@/app/exchange/components/historicalRate/TabHeader";
 
+const Spinner = dynamic(() => import("@/app/components/Spinner"), {ssr: false});
+const Error = dynamic(() => import("@/app/components/Error"), {ssr: false});
 const HistoryRates = () => {
     const [selectedRange, setSelectedRange] = useState("30");
 
@@ -21,7 +23,7 @@ const HistoryRates = () => {
     const currencyCodes = useMemo(() => ['USD', 'EUR', 'GBP', 'CHF'], []);
 
     if (isPending) return <Spinner />;
-    if (error) return <div>Error loading exchange rates.</div>;
+    if (error) return <Error />;
     if (!data) return null;
 
     return (

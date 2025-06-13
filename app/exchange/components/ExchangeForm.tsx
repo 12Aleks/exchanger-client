@@ -1,16 +1,14 @@
 "use client";
-import {z} from "zod";
-import {useForm} from "react-hook-form";
-import {zodResolver} from "@hookform/resolvers/zod";
-import {Input} from "../../components/Input";
-import {transactionFormSchema} from "@/app/lib/zodSchema";
-import {useEffect, useState} from "react";
-import {RatesNBP, Transaction} from "@/app/lib/types";
-import {useQuery} from "@tanstack/react-query";
-import {fetchExchangeRates} from "@/app/lib/api/fetchExchangeRates";
-import {currencyToCountryCode} from "@/app/lib/currencyCountryMap";
-import Image from "next/image";
-
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery } from "@tanstack/react-query";
+import { transactionFormSchema } from "@/app/lib/zodSchema";
+import { fetchExchangeRates } from "@/app/lib/api/fetchExchangeRates";
+import { ExchangeInput } from "@/app/exchange/components/ExchangeInput";
+import {ArrowRightLeftIcon, ArrowDownUpIcon} from "lucide-react";
+import { RatesNBP, Transaction } from "@/app/lib/types";
+import { z } from "zod";
 
 interface Props {
     children: React.ReactNode;
@@ -18,120 +16,103 @@ interface Props {
 
 type FormValues = z.infer<typeof transactionFormSchema>;
 
-
-export default function ExchangeForm({children}: Props) {
-    const [transactions, setTransactions] = useState<Transaction[]>([]);
-    const [result, setResult] = useState<number>(0);
+export default function ExchangeForm({ children }: Props) {
+    const [fromCurrency, setFromCurrency] = useState("PLN");
+    const [toCurrency, setToCurrency] = useState("EUR");
     const [rates, setRates] = useState<RatesNBP[]>([]);
-    const [fromCurrency, setFromCurrency] = useState<string>("PLN");
-    const [toCurrency, setToCurrency] = useState<string>("EUR");
-    const { register, handleSubmit, formState: { errors } } = useForm<FormValues>({
+    const [fromRateValue, setFromRateValue] = useState(0);
+    const [toRateValue, setToRateValue] = useState(0);
+    const [lastChanged, setLastChanged] = useState<"from" | "to">("from");
+
+    const {
+        formState: { errors }
+    } = useForm<FormValues>({
         resolver: zodResolver(transactionFormSchema),
-        defaultValues: {
-            fromRate: 0,
-            toRate: 0
-        }
     });
 
-    const {data} = useQuery({
-        queryKey: ['exchangeRates'],
+    const { data } = useQuery({
+        queryKey: ["exchangeRates"],
         queryFn: fetchExchangeRates,
         refetchInterval: 60 * 1000,
         staleTime: 60 * 1000,
-    })
-
-     console.log(data?.rates)
-    useEffect(() => {
-      data?.rates && setRates([
-          { code: "PLN", currency: "polski złoty", bid: 1, ask: 1, previousBid: 1, previousAsk: 1 },
-          ...data.rates,
-      ]);
-    }, [data]);
-
-
-    const handleAction = handleSubmit(({ fromRate }) => {
-        const fromResultRate = rates.find(r => r.code === fromCurrency)?.bid ?? 1;
-        const toResultRate = rates.find(r => r.code === toCurrency)?.ask ?? 1;
-
-        const convertedAmount = (fromRate / fromResultRate) * toResultRate;
-        setResult(Number(convertedAmount.toFixed(2)));
     });
 
+    useEffect(() => {
+        if (data?.rates) {
+            setRates([
+                {
+                    code: "PLN",
+                    currency: "polski złoty",
+                    bid: 1,
+                    ask: 1,
+                    previousBid: 1,
+                    previousAsk: 1
+                },
+                ...data.rates,
+            ]);
+        }
+    }, [data]);
+
+    useEffect(() => {
+        const fromRate = rates.find(r => r.code === fromCurrency)?.bid ?? 1;
+        const toRate = rates.find(r => r.code === toCurrency)?.ask ?? 1;
+
+        if (lastChanged === "from") {
+            const result = (fromRateValue / fromRate) * toRate;
+            setToRateValue(Number(result.toFixed(2)));
+        } else {
+            const result = (toRateValue / toRate) * fromRate;
+            setFromRateValue(Number(result.toFixed(2)));
+        }
+    }, [fromRateValue, toRateValue, fromCurrency, toCurrency, rates, lastChanged]);
+
+    const handleFromChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = parseFloat(e.target.value);
+        setLastChanged("from");
+        setFromRateValue(isNaN(value) ? 0 : value);
+    };
+
+    const handleToChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = parseFloat(e.target.value);
+        setLastChanged("to");
+        setToRateValue(isNaN(value) ? 0 : value);
+    };
 
     return (
         <div className="flex flex-col gap-6 rounded-3xl bg-white p-3 2xl:p-6 shadow-3xl md:p-8 z-20">
-            <form onSubmit={handleAction} className="space-y-6 ">
-
+            <form className="space-y-6">
                 <div className="flex flex-col md:flex-row items-center gap-1 lg:gap-4">
-                    <div className="flex flex-col w-full">
-                        <label htmlFor="amount-eur" className="text-sm text-gray-600 mb-1">Amount in {fromCurrency}</label>
-                        <div className="flex items-center gap-2 px-1 py-1 border rounded-lg bg-white w-full">
-                        <Input
-                            type="number"
-                            step="0.01"
-                            placeholder={`Amount in  ${fromCurrency}`}
-                            {...register("fromRate")}
-                            error={errors.fromRate?.message}
-                        />
+                    <ExchangeInput
+                        currency={fromCurrency}
+                        onCurrencyChange={setFromCurrency}
+                        inputProps={{
+                            value: fromRateValue,
+                            onChange: handleFromChange,
+                            placeholder: `Amount in ${fromCurrency}`,
+                        }}
+                        error={errors.fromRate}
+                        rates={rates}
+                        label="Amount in"
+                    />
 
-                            <Image
-                                src={`/flags/${currencyToCountryCode[fromCurrency] ?? "eu"}.svg`}
-                                alt={fromCurrency}
-                                width={30}
-                                height={30}
-                                className="w-8 h-8 rounded-full shadow-lg object-cover"
-                            />
-                            <select
-                                value={fromCurrency}
-                                onChange={(e) => setFromCurrency(e.target.value)}
-                                className="outline-none border-none focus:border-none focus:outline-none bg-transparent"
-                            >
-                                {rates.map(rate => (
-                                    <option key={rate.code} value={rate.code}>
-                                        {rate.code}
-                                    </option>
-                                ))}
-                            </select>
-
-                        </div>
+                    <div className="w-8 flex justify-center text-gray-500 select-none mt-3 md:mt-6
+                    p-0.5 border border-gray-500 rounded-md shadow-sm">
+                       <ArrowRightLeftIcon className="w-5 h-5 hidden md:block"/>
+                        <ArrowDownUpIcon className="block md:hidden w-5 h-5"/>
                     </div>
 
-                    <div className="w-8 flex justify-center text-gray-500 select-none mt-3 md:mt-6">
-                        <span className="text-2xl hidden md:block">➡️</span>
-                        <span className="text-2xl block md:hidden">⬇️</span>
-                    </div>
-
-                    <div className="flex flex-col w-full">
-                        <label htmlFor="amount-pln" className="text-sm text-gray-600 mb-1">Converted to {toCurrency}</label>
-                        <div className="flex items-center gap-2 px-1 py-1 border rounded-lg bg-white w-full">
-                        <Input
-                            type="number"
-                            step="0.01"
-                            placeholder={`Converted to ${toCurrency}`}
-                            {...register("toRate")}
-                            error={errors.toRate?.message}
-                        />
-
-                            <Image
-                                src={`/flags/${currencyToCountryCode[toCurrency] ?? "pl"}.svg`}
-                                alt={toCurrency}
-                                width={30}
-                                height={30}
-                                className="w-8 h-8 rounded-full shadow-lg object-cover"
-                            />
-                            <select
-                                value={toCurrency}
-                                onChange={(e) => setToCurrency(e.target.value)}
-                                className="outline-none border-none focus:border-none focus:outline-none bg-transparent"
-                            >
-                                {rates.map(rate => (
-                                    <option key={rate.code} value={rate.code}>
-                                       {rate.code}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                    </div>
+                    <ExchangeInput
+                        currency={toCurrency}
+                        onCurrencyChange={setToCurrency}
+                        inputProps={{
+                            value: toRateValue,
+                            onChange: handleToChange,
+                            placeholder: `Converted to ${toCurrency}`,
+                        }}
+                        error={errors.toRate}
+                        rates={rates}
+                        label="Converted to"
+                    />
                 </div>
                 {children}
             </form>

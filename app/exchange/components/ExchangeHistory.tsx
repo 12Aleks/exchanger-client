@@ -12,7 +12,7 @@ const fetcher = async (url: string) => {
     return res.json();
 };
 
-export default function ExchangeRate() {
+export default function ExchangeHistory() {
     // const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
     // const { data, error, isLoading }  = useSWR(`${API_URL}/exchange`, fetcher, {
     //     refreshInterval: 60_000,
