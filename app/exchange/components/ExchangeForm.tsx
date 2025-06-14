@@ -9,6 +9,7 @@ import { ExchangeInput } from "@/app/exchange/components/ExchangeInput";
 import {ArrowRightLeftIcon, ArrowDownUpIcon} from "lucide-react";
 import { RatesNBP, Transaction } from "@/app/lib/types";
 import { z } from "zod";
+import {convertCurrency} from "@/app/lib/currencyCountryMap";
 
 interface Props {
     children: React.ReactNode;
@@ -54,14 +55,15 @@ export default function ExchangeForm({ children }: Props) {
     }, [data]);
 
     useEffect(() => {
-        const fromRate = rates.find(r => r.code === fromCurrency)?.bid ?? 1;
-        const toRate = rates.find(r => r.code === toCurrency)?.ask ?? 1;
+        const from = rates.find(r => r.code === fromCurrency);
+        const to = rates.find(r => r.code === toCurrency);
+        if (!from || !to) return;
 
         if (lastChanged === "from") {
-            const result = (fromRateValue / fromRate) * toRate;
+            const result = convertCurrency({ amount: fromRateValue, from, to, direction: "from" });
             setToRateValue(Number(result.toFixed(2)));
         } else {
-            const result = (toRateValue / toRate) * fromRate;
+            const result = convertCurrency({ amount: toRateValue, from, to, direction: "to" });
             setFromRateValue(Number(result.toFixed(2)));
         }
     }, [fromRateValue, toRateValue, fromCurrency, toCurrency, rates, lastChanged]);
@@ -86,7 +88,7 @@ export default function ExchangeForm({ children }: Props) {
                         currency={fromCurrency}
                         onCurrencyChange={setFromCurrency}
                         inputProps={{
-                            value: fromRateValue,
+                            value: fromRateValue === 0 ? '' : fromRateValue,
                             onChange: handleFromChange,
                             placeholder: `Amount in ${fromCurrency}`,
                         }}
@@ -95,8 +97,8 @@ export default function ExchangeForm({ children }: Props) {
                         label="Amount in"
                     />
 
-                    <div className="w-8 flex justify-center text-gray-500 select-none mt-3 md:mt-6
-                    p-0.5 border border-gray-500 rounded-md shadow-sm">
+                    <div className="w-8 flex justify-center text-gray-400 select-none mt-3 md:mt-6
+                    p-0.5 border border-gray-400 rounded-md shadow-sm">
                        <ArrowRightLeftIcon className="w-5 h-5 hidden md:block"/>
                         <ArrowDownUpIcon className="block md:hidden w-5 h-5"/>
                     </div>
@@ -105,7 +107,7 @@ export default function ExchangeForm({ children }: Props) {
                         currency={toCurrency}
                         onCurrencyChange={setToCurrency}
                         inputProps={{
-                            value: toRateValue,
+                            value: toRateValue === 0 ? '' : toRateValue,
                             onChange: handleToChange,
                             placeholder: `Converted to ${toCurrency}`,
                         }}
@@ -114,7 +116,6 @@ export default function ExchangeForm({ children }: Props) {
                         label="Converted to"
                     />
                 </div>
-                {children}
             </form>
         </div>
     );

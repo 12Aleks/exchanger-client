@@ -13,7 +13,7 @@ export default function Home() {
 
                     <div className="w-full max-w-screen-xl px-4 md:px-10">
                         <div className="z-10 flex flex-col gap-8">
-                            <h1 className="text-center text-2xl font-bold mb-4 text-white">Currency Exchange</h1>
+                            <h1 className="relative z-50 shadow-lg text-center text-2xl font-bold mb-4 text-white">Currency Exchange</h1>
                             <ExchangePage/>
                         </div>
                     </div>

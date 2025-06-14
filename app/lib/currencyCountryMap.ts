@@ -1,3 +1,12 @@
+import {RatesNBP} from "@/app/lib/types";
+
+type Convert = {
+    amount: number,
+    from: RatesNBP,
+    to: RatesNBP,
+    direction: "from" | "to"
+}
+
 export const currencyToCountryCode: Record<string, string> = {
     PLN: 'pl',
     USD: 'us',
@@ -29,5 +38,26 @@ export const currencyToCountryCode: Record<string, string> = {
     PHP: 'ph',
     SGD: 'sg',
     THB: 'th',
-
 };
+
+export function convertCurrency({amount, from, to, direction} : Convert): number {
+    if (direction === "from") {
+        if (from.code === "PLN") {
+            return amount / to.ask;
+        } else if (to.code ==="PLN") {
+            return amount * from.bid;
+        } else {
+            const plnAmount = amount * from.bid;
+            return plnAmount / to.ask;
+        }
+    } else {
+        if (to.code === "PLN") {
+            return amount * to.bid;
+        } else if (from.code === "PLN") {
+            return amount * to.ask;
+        } else {
+            const plnAmount = amount * to.ask;
+            return plnAmount / from.bid;
+        }
+    }
+}
