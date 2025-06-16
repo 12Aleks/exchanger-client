@@ -7,17 +7,13 @@ import { transactionFormSchema } from "@/app/lib/zodSchema";
 import { fetchExchangeRates } from "@/app/lib/api/fetchExchangeRates";
 import { ExchangeInput } from "@/app/exchange/components/ExchangeInput";
 import {ArrowRightLeftIcon, ArrowDownUpIcon} from "lucide-react";
-import { RatesNBP, Transaction } from "@/app/lib/types";
+import { RatesNBP } from "@/app/lib/types";
 import { z } from "zod";
 import {convertCurrency} from "@/app/lib/currencyCountryMap";
 
-interface Props {
-    children: React.ReactNode;
-}
-
 type FormValues = z.infer<typeof transactionFormSchema>;
 
-export default function ExchangeForm({ children }: Props) {
+export default function ExchangeForm() {
     const [fromCurrency, setFromCurrency] = useState("PLN");
     const [toCurrency, setToCurrency] = useState("EUR");
     const [rates, setRates] = useState<RatesNBP[]>([]);

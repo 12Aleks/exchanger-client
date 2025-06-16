@@ -1,5 +1,3 @@
-import ExchangeHistory from "@/app/exchange/components/ExchangeHistory";
-
 export function ExchangeRateWithButton() {
     return (
         <div className="flex flex-col md:flex-row items-center justify-end space-y-5 md:space-y-0">
