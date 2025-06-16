@@ -21,32 +21,32 @@ const ExchangeRateItem = (rate: ExtendedRate) => {
     const flagSrc = `/flags/${countryCode}.svg`;
 
     return (
-        <tr className="border-b border-gray-200">
-            <td className="py-2 uppercase text-center font-bold">
+        <tr className="border-b border-gray-200 text-sm xl:text-base">
+            <td className="py-2 uppercase flex items-center justify-center font-bold ">
                 <Image
                     src={flagSrc}
                     alt={`${rate.code} flag`}
                     width={32}
                     height={20}
-                    className="inline-block mr-3"
+                    className="mr-3 border border-gray-300"
                     style={{ objectFit: 'cover' }}
                 />
                 {rate.code}
             </td>
-            <td className="py-2 normal-case">{rate.currency}</td>
-            <td className="py-2 text-center">
+            <td className="py-2 normal-case text-center sm:text-left">{rate.currency}</td>
+            <td className="py-2 text-center ">
                 <div className="flex items-center justify-center gap-2">
                     {getChangeIcon(rate.bid, rate.previousBid)}
                     <span>{rate.bid.toFixed(4)}</span>
                 </div>
             </td>
-            <td className="py-2 text-center">
+            <td className="py-2 text-center hidden sm:table-cell">
                 <div className="flex items-center justify-center gap-2">
                     {getChangeIcon(rate.ask, rate.previousAsk)}
                     <span>{rate.ask.toFixed(4)}</span>
                 </div>
             </td>
-            <td className="py-2 text-center">
+            <td className="py-2 text-center hidden md:table-cell">
                 <div className="flex items-center justify-center gap-2">
                     {getChangeIcon(parseFloat(avg), prevAvg ? parseFloat(prevAvg) : undefined)} <span>{avg}</span>
                 </div>

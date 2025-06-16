@@ -8,14 +8,10 @@ export default function Home() {
             className="flex items-center min-h-screen font-[family-name:var(--font-geist-sans)]">
             <main className="w-full flex flex-col row-start-2 items-center justify-center sm:items-start">
                 <div className="min-h-screen min-w-full  bg-blue-800 flex items-center justify-center relative">
-
                     <VideoBackground />
-
-                    <div className="w-full max-w-screen-xl px-4 md:px-10">
-                        <div className="z-10 flex flex-col gap-8">
-                            <h1 className="relative z-50 shadow-lg text-center text-2xl font-bold mb-4 text-white">Currency Exchange</h1>
+                    <div className="w-full 2xl:max-w-screen-xl px-4 md:px-10 py-10 flex flex-col gap-8 z-10">
+                            <h1 className="relative z-50 shadow-lg text-center text-2xl font-bold mb-0 md:mb-4 text-white">Currency Exchange</h1>
                             <ExchangePage/>
-                        </div>
                     </div>
                     <div
                         className="z-0 absolute bottom-0 h-[50%] w-full overflow-hidden before:absolute before:bottom-[-200px]

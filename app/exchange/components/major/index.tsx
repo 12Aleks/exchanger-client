@@ -22,22 +22,24 @@ const ExchangeRateList = () => {
     const {rates} = data;
 
 
-    return ( <table className="table-auto w-full">
-                    <thead className="sticky top-0 bg-white z-10">
-                    <tr className="border-b border-gray-300">
-                        <th className="pb-2">Country</th>
-                        <th className="pb-2">Currency</th>
-                        <th className="pb-2">Purchase (bid)</th>
-                        <th className="pb-2">Sale (ask)</th>
-                        <th className="pb-2">Estimated Avg</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {rates?.map((rate: RatesNBP) => (
-                        <ExchangeRateItem key={rate.code} {...rate}/>
-                    ))}
-                    </tbody>
-                </table>
+    return (
+
+            <table className="w-full text-sm xl:text-base">
+                <thead className="sticky top-0 bg-white z-10">
+                <tr className="border-b border-gray-300 text-gray-700">
+                    <th className="px-4 py-2">Country</th>
+                    <th className="px-4 py-2">Currency</th>
+                    <th className="px-4 py-2">Purchase (bid)</th>
+                    <th className="px-4 py-2 hidden sm:table-cell">Sale (ask)</th>
+                    <th className="px-4 py-2 hidden md:table-cell">Estimated Avg</th>
+                </tr>
+                </thead>
+                <tbody>
+                {rates?.map((rate: RatesNBP) => (
+                    <ExchangeRateItem key={rate.code} {...rate} />
+                ))}
+                </tbody>
+            </table>
 
     );
 };

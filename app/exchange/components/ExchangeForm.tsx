@@ -81,7 +81,7 @@ export default function ExchangeForm({ children }: Props) {
     };
 
     return (
-        <div className="flex flex-col gap-6 rounded-3xl bg-white p-3 2xl:p-6 shadow-3xl md:p-8 z-20">
+        <div className="flex flex-col gap-6 rounded-3xl bg-white p-6 xl:p-8 shadow-3xl z-20">
             <form className="space-y-6">
                 <div className="flex flex-col md:flex-row items-center gap-1 lg:gap-4">
                     <ExchangeInput
@@ -98,7 +98,7 @@ export default function ExchangeForm({ children }: Props) {
                     />
 
                     <div className="w-8 flex justify-center text-gray-400 select-none mt-3 md:mt-6
-                    p-0.5 border border-gray-400 rounded-md shadow-sm">
+                    py-1 md:p-0.5 border border-gray-4w00 rounded-md shadow-sm">
                        <ArrowRightLeftIcon className="w-5 h-5 hidden md:block"/>
                         <ArrowDownUpIcon className="block md:hidden w-5 h-5"/>
                     </div>
