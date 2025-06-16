@@ -1,9 +1,0 @@
-export function ExchangeRateWithButton() {
-    return (
-        <div className="flex flex-col md:flex-row items-center justify-end space-y-5 md:space-y-0">
-            <button type="submit" className="bg-blue-600 hover:bg-blue-700 duration-300 text-white px-4 py-2
-             rounded-lg font-medium transition cursor-pointer">Exchange
-            </button>
-        </div>
-    );
-}
