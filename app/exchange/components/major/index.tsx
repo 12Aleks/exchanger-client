@@ -10,8 +10,8 @@ const ExchangeRateList = () => {
     const {data, isLoading, error} = useQuery({
       queryKey: ['exchangeRates'],
       queryFn: fetchExchangeRates,
-      refetchInterval: 60 * 1000,
-      staleTime: 60 * 1000,
+      refetchInterval: 6 * 60 * 60 * 1000,  //stary czas 60 sec 60 * 1000 zmienony na 6h,
+      staleTime:  6 * 60 * 60 * 1000,  //stary czas 60 sec 60 * 1000 zmienony na 6h,
     })
 
 

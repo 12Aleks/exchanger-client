@@ -17,7 +17,7 @@ const HistoryRates = () => {
     const { data, isPending, error } = useQuery({
         queryKey: ['historyRates', selectedRange],
         queryFn: () => fetchHistoryRates(Number(selectedRange)),
-        staleTime: 1000 * 60 * 5,
+        staleTime: 6 * 60 * 60 * 1000, //1000 * 60 * 5,
     });
 
     const currencyCodes = useMemo(() => ['USD', 'EUR', 'GBP', 'CHF'], []);

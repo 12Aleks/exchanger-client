@@ -30,8 +30,8 @@ export default function ExchangeForm() {
     const { data } = useQuery({
         queryKey: ["exchangeRates"],
         queryFn: fetchExchangeRates,
-        refetchInterval: 60 * 1000,
-        staleTime: 60 * 1000,
+        refetchInterval: 6 * 60 * 60 * 1000, //60 * 1000 - stary czas 60 sec,
+        staleTime: 6 * 60 * 60 * 1000,  //60 * 1000 - stary czas 60 sec,
     });
 
     useEffect(() => {
